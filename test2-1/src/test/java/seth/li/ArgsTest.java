@@ -32,7 +32,6 @@ public class ArgsTest {
     }
 
     static record IntOption(@Option("p")int port) {}
-    // TODO:    -string -d /usr/logs
 
     @Test void should_parse_string_as_option_value() throws Exception {
         StringOption option = Args.parse(StringOption.class, "-d", "/usr/logs");
