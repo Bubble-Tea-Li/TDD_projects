@@ -42,6 +42,16 @@ public class ArgsTest {
     static record StringOption(@Option("d")String directory) {}
 
     // TODO: Multiple Options: -l -p 8080 -d /usr/logs
+    
+    @Test
+    public void should_parse_multi_options() throws Exception {
+        MultiOptions options = Args.parse(MultiOptions.class, "-l", "-p", "8080", "-d", "/usr/logs");
+        assertTrue(options.logging());
+        assertEquals(8080, options.port());
+        assertEquals("usr/logs", options.directory());
+    }
+
+    static record MultiOptions(@Option("l")boolean logging, @Option("p")int port, @Option("d")String directory) {}
     // sad path:
     // -boolean -l t // -l t f --> should fail
     // -int -p / -p 8080 8081
@@ -50,17 +60,4 @@ public class ArgsTest {
     // - bool : false
     // - int: 0
     // - string: ""
-
-
-
-    @Test
-    @Disabled
-    public void should_behave() throws Exception {
-        Options options = Args.parse(Options.class, "-l", "-p", "8080", "-d", "/usr/logs");
-        assertTrue(options.logging());
-        assertEquals(8080, options.port());
-        assertEquals("usr/logs", options.directory());
-    }
-
-    static record Options(@Option("l")boolean logging, @Option("p")int port, @Option("d")String directory) {}
 }
