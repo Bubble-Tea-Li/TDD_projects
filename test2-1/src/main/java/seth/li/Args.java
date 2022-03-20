@@ -11,11 +11,9 @@ public class Args {
             List<String> arguments = Arrays.asList(args);
             Constructor<?> constructor = optionsClass.getDeclaredConstructors()[0];
 
-            Parameter parameter = constructor.getParameters()[0];
+            Object[] values = Arrays.stream(constructor.getParameters()).map(it -> parseOption(arguments, it)).toArray();
 
-            Object value = parseOption(arguments, parameter);
-            
-            return (T) constructor.newInstance(value);
+            return (T) constructor.newInstance(values);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -25,7 +23,7 @@ public class Args {
         Object value = null;
         Option option = parameter.getAnnotation(Option.class);
 
-        if (parameter.getType() == Boolean.class) {
+        if (parameter.getType() == boolean.class) {
             value = arguments.contains("-" + option.value());
         }
         if (parameter.getType() == int.class) {

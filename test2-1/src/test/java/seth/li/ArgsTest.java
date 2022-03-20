@@ -22,7 +22,7 @@ public class ArgsTest {
         assertFalse(option.logging());
     }
 
-    static record BooleanOption(@Option("l")Boolean logging) {}
+    static record BooleanOption(@Option("l")boolean logging) {}
 
     @Test
     public void should_parse_int_as_option_value() throws Exception {
@@ -40,15 +40,13 @@ public class ArgsTest {
     }
 
     static record StringOption(@Option("d")String directory) {}
-
-    // TODO: Multiple Options: -l -p 8080 -d /usr/logs
     
     @Test
     public void should_parse_multi_options() throws Exception {
         MultiOptions options = Args.parse(MultiOptions.class, "-l", "-p", "8080", "-d", "/usr/logs");
         assertTrue(options.logging());
         assertEquals(8080, options.port());
-        assertEquals("usr/logs", options.directory());
+        assertEquals("/usr/logs", options.directory());
     }
 
     static record MultiOptions(@Option("l")boolean logging, @Option("p")int port, @Option("d")String directory) {}
