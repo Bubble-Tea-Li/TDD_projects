@@ -24,8 +24,24 @@ public class ArgsTest {
 
     static record BooleanOption(@Option("l")Boolean logging) {}
 
-    // TODO:    -int -p 8080
+    @Test
+    public void should_parse_int_as_option_value() throws Exception {
+        IntOption option = Args.parse(IntOption.class, "-p", "8080");
+
+        assertEquals(8080, option.port());
+    }
+
+    static record IntOption(@Option("p")int port) {}
     // TODO:    -string -d /usr/logs
+
+    @Test void should_parse_string_as_option_value() throws Exception {
+        StringOption option = Args.parse(StringOption.class, "-d", "/usr/logs");
+
+        assertEquals("/usr/logs", option.directory());
+    }
+
+    static record StringOption(@Option("d")String directory) {}
+
     // TODO: Multiple Options: -l -p 8080 -d /usr/logs
     // sad path:
     // -boolean -l t // -l t f --> should fail
